@@ -1,0 +1,6 @@
+{
+  "name": "Codex Lumina — Leitura Bíblica & Planos Devocionais",
+  "description": "Plataforma editorial de leitura bíblica em HTML, CSS e JavaScript puro, com animação 3D realista de virar páginas, planos de leitura interativos, destaques e notas de estudo.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

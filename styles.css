@@ -1,0 +1,1554 @@
+/**
+ * Bíblia pra você — Folha de Estilo Editorial & Animação 3D de Virar Página
+ * Arquitetura 60-30-10 · Tipografia Litúrgica (Cormorant Garamond + Source Serif 4 + JetBrains Mono)
+ */
+
+:root {
+  /* 60% Dominant Neutral Canvas (Archival Warm Paper) */
+  --bg-canvas: #F3EFE6;
+  --bg-desk-surface: #E7E0D3;
+  --bg-page-left: #FBF9F5;
+  --bg-page-right: #FCFBF7;
+  --bg-elevated: #F7F4EE;
+
+  /* 30% Structural Surfaces & Typography */
+  --text-primary: #1C1917;
+  --text-secondary: #57534E;
+  --text-muted: #78716C;
+  --border-hairline: #E2DACB;
+  --border-strong: #C9BFA8;
+  --book-cover: #3A2618;
+  --book-cover-edge: #26170E;
+  --page-stack: #DFD7C6;
+
+  /* 10% Curatorial Liturgical Accents (Rubric Terracotta & Antique Gold) */
+  --accent-rubric: #9A3412;
+  --accent-rubric-hover: #7C2D12;
+  --accent-gold: #854D0E;
+  --accent-gold-soft: rgba(133, 77, 14, 0.10);
+  --accent-rubric-soft: rgba(154, 52, 18, 0.08);
+
+  /* Verse Highlight Colors */
+  --hl-amber: rgba(217, 119, 6, 0.18);
+  --hl-rubric: rgba(154, 52, 18, 0.15);
+  --hl-lapis: rgba(30, 58, 138, 0.14);
+  --hl-olive: rgba(20, 83, 45, 0.15);
+
+  /* Typography */
+  --font-display: 'Cormorant Garamond', Georgia, serif;
+  --font-body: 'Source Serif 4', Georgia, serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --verse-font-size: 1.0625rem;
+  --verse-line-height: 1.78;
+}
+
+/* Tema Pergaminho Antigo (Sépia) */
+[data-theme="sepia"] {
+  --bg-canvas: #E6DEC8;
+  --bg-desk-surface: #D8CEB4;
+  --bg-page-left: #F4ECD8;
+  --bg-page-right: #F6EFE0;
+  --bg-elevated: #EFE6CE;
+  --text-primary: #261C14;
+  --text-secondary: #5C4938;
+  --text-muted: #7D6852;
+  --border-hairline: #D5C7A9;
+  --border-strong: #B8A682;
+  --page-stack: #CFC1A2;
+}
+
+/* Tema Scriptorium Noturno (Dark Mode) */
+[data-theme="dark"] {
+  --bg-canvas: #121110;
+  --bg-desk-surface: #0C0B0A;
+  --bg-page-left: #1B1917;
+  --bg-page-right: #1E1C1A;
+  --bg-elevated: #24211E;
+  --text-primary: #ECE7DF;
+  --text-secondary: #B5ADA2;
+  --text-muted: #877F74;
+  --border-hairline: #2E2A26;
+  --border-strong: #443E38;
+  --book-cover: #15110E;
+  --book-cover-edge: #090706;
+  --page-stack: #2A2622;
+  --accent-rubric: #E06D44;
+  --accent-rubric-hover: #F0825B;
+  --accent-gold: #D4A359;
+  --accent-gold-soft: rgba(212, 163, 89, 0.14);
+  --accent-rubric-soft: rgba(224, 109, 68, 0.14);
+  --hl-amber: rgba(245, 158, 11, 0.24);
+  --hl-rubric: rgba(224, 109, 68, 0.22);
+  --hl-lapis: rgba(59, 130, 246, 0.22);
+  --hl-olive: rgba(34, 197, 94, 0.20);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  min-height: 100vh;
+  background-color: var(--bg-canvas);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  transition: background-color 180ms ease, color 180ms ease;
+}
+
+[data-theme="dark"] body {
+  letter-spacing: 0.01em;
+}
+
+button, input, select, textarea {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+
+button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
+  outline: 2px solid var(--accent-rubric);
+  outline-offset: 2px;
+}
+
+.tabular-nums {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ==========================================================================
+   TOP BAR CONTRACT (Strictly 1 Row, 3 Zones)
+   ========================================================================== */
+.top-bar {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  height: 64px;
+  background-color: var(--bg-page-right);
+  border-bottom: 1px solid var(--border-hairline);
+  padding: 0 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+}
+
+.brand-wordmark {
+  font-family: var(--font-display);
+  font-size: 1.65rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
+  text-decoration: none;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.top-nav {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.nav-link {
+  font-family: var(--font-body);
+  font-size: 0.925rem;
+  color: var(--text-secondary);
+  padding: 0.35rem 0;
+  position: relative;
+  white-space: nowrap;
+  transition: color 150ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.nav-link:hover,
+.nav-link.active {
+  color: var(--text-primary);
+}
+
+.nav-link.active::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 2px;
+  background-color: var(--accent-rubric);
+}
+
+.top-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-shrink: 0;
+}
+
+.btn-secondary-quiet {
+  padding: 0.45rem 0.85rem;
+  font-size: 0.82rem;
+  border: 1px solid var(--border-hairline);
+  border-radius: 6px;
+  color: var(--text-secondary);
+  background-color: var(--bg-elevated);
+  white-space: nowrap;
+  transition: border-color 150ms ease, color 150ms ease;
+}
+
+.btn-secondary-quiet:hover {
+  border-color: var(--border-strong);
+  color: var(--text-primary);
+}
+
+.btn-primary-rubric {
+  padding: 0.5rem 1rem;
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: #FFFFFF;
+  background-color: var(--accent-rubric);
+  border-radius: 6px;
+  white-space: nowrap;
+  transition: background-color 150ms cubic-bezier(0.16, 1, 0.3, 1), transform 150ms ease;
+}
+
+.btn-primary-rubric:hover {
+  background-color: var(--accent-rubric-hover);
+}
+
+.btn-primary-rubric:active {
+  transform: scale(0.98);
+}
+
+/* ==========================================================================
+   OPERATIONAL READING RIBBON & CONTROLS BAR
+   ========================================================================== */
+.utility-ribbon {
+  background-color: var(--bg-elevated);
+  border-bottom: 1px solid var(--border-hairline);
+  padding: 0.65rem 2rem;
+}
+
+.utility-ribbon-inner {
+  max-width: 1380px;
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.selector-group {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+}
+
+.editorial-select {
+  padding: 0.38rem 0.75rem;
+  font-size: 0.875rem;
+  background-color: var(--bg-page-right);
+  border: 1px solid var(--border-hairline);
+  border-radius: 5px;
+  color: var(--text-primary);
+  cursor: pointer;
+}
+
+.metadata-inline {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  white-space: nowrap;
+}
+
+.reader-tools-group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.segmented-control {
+  display: inline-flex;
+  align-items: center;
+  background-color: var(--bg-canvas);
+  border: 1px solid var(--border-hairline);
+  border-radius: 6px;
+  padding: 2px;
+}
+
+.segmented-btn {
+  padding: 0.28rem 0.65rem;
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  border-radius: 4px;
+  white-space: nowrap;
+  transition: background-color 140ms ease, color 140ms ease;
+}
+
+.segmented-btn.active {
+  background-color: var(--bg-page-right);
+  color: var(--text-primary);
+  font-weight: 600;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
+}
+
+/* ==========================================================================
+   MAIN WORKSPACE & VIEW CONTAINERS
+   ========================================================================== */
+.main-container {
+  max-width: 1380px;
+  margin: 0 auto;
+  padding: 1.5rem 2rem 3rem;
+}
+
+.view-panel {
+  display: none;
+}
+
+.view-panel.active {
+  display: block;
+}
+
+/* Active Plan Banner inside Reader */
+.plan-reader-banner {
+  max-width: 1220px;
+  margin: 0 auto 1.25rem;
+  padding: 0.75rem 1.25rem;
+  background-color: var(--bg-page-right);
+  border: 1px solid var(--border-hairline);
+  border-left: 3px solid var(--accent-rubric);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.plan-banner-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.plan-banner-kicker {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.plan-banner-title {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.plan-banner-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+/* ==========================================================================
+   OPEN 3D CODEX BOOK & REALISTIC PAGE-TURNING ANIMATION
+   ========================================================================== */
+.scriptorium-desk {
+  position: relative;
+  max-width: 1220px;
+  margin: 0 auto;
+  padding: 1.25rem 1.5rem 2rem;
+  background: radial-gradient(ellipse at center, var(--bg-desk-surface) 0%, var(--bg-canvas) 100%);
+  border-radius: 12px;
+  border: 1px solid var(--border-hairline);
+}
+
+.codex-stage {
+  position: relative;
+  width: 100%;
+  perspective: 2400px;
+  user-select: none;
+}
+
+/* Leather/Linen Outer Binding Frame */
+.codex-book {
+  position: relative;
+  width: 100%;
+  min-height: 660px;
+  background-color: var(--book-cover);
+  padding: 10px 16px 14px;
+  border-radius: 10px;
+  box-shadow:
+    0 24px 48px -12px rgba(15, 10, 5, 0.28),
+    0 4px 12px rgba(15, 10, 5, 0.16),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+  display: flex;
+}
+
+/* Stacked Paper Edges Effect (Left & Right Fore-Edges) */
+.codex-spread {
+  position: relative;
+  width: 100%;
+  min-height: 636px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  background-color: var(--page-stack);
+  border-radius: 4px;
+  padding: 0 7px 5px;
+  box-shadow:
+    inset 6px 0 0 var(--bg-page-left),
+    inset -6px 0 0 var(--bg-page-right);
+  transform-style: preserve-3d;
+}
+
+/* Ribbon Bookmark hanging from top of the spine */
+.codex-ribbon {
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 20px;
+  height: 64px;
+  background: linear-gradient(180deg, #7C2D12 0%, #9A3412 65%, #B91C1C 100%);
+  z-index: 25;
+  cursor: pointer;
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 82%, 0 100%);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
+  transition: height 200ms cubic-bezier(0.16, 1, 0.3, 1), filter 150ms ease;
+}
+
+.codex-ribbon:hover {
+  height: 74px;
+  filter: brightness(1.1);
+}
+
+.codex-ribbon.bookmarked {
+  height: 82px;
+  background: linear-gradient(180deg, #854D0E 0%, #B45309 65%, #D97706 100%);
+}
+
+/* Central Spine Shadow & Binding Gutter */
+.codex-spine-overlay {
+  position: absolute;
+  top: 0;
+  bottom: 5px;
+  left: 50%;
+  width: 56px;
+  transform: translateX(-50%);
+  pointer-events: none;
+  z-index: 15;
+  background: linear-gradient(
+    90deg,
+    rgba(28, 25, 23, 0) 0%,
+    rgba(28, 25, 23, 0.05) 32%,
+    rgba(28, 25, 23, 0.16) 49%,
+    rgba(255, 255, 255, 0.12) 51%,
+    rgba(28, 25, 23, 0.06) 68%,
+    rgba(28, 25, 23, 0) 100%
+  );
+}
+
+/* Individual Book Pages (Left Verso & Right Recto) */
+.book-page {
+  position: relative;
+  min-height: 630px;
+  padding: 2.25rem 2.75rem 3.25rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
+  user-select: text;
+}
+
+.book-page-left {
+  background-color: var(--bg-page-left);
+  border-top-left-radius: 3px;
+  border-bottom-left-radius: 3px;
+  border-right: 1px solid var(--border-hairline);
+  background-image: linear-gradient(90deg, rgba(0,0,0,0.02) 0%, transparent 8%, transparent 92%, rgba(0,0,0,0.035) 100%);
+}
+
+.book-page-right {
+  background-color: var(--bg-page-right);
+  border-top-right-radius: 3px;
+  border-bottom-right-radius: 3px;
+  background-image: linear-gradient(90deg, rgba(0,0,0,0.035) 0%, transparent 8%, transparent 92%, rgba(0,0,0,0.02) 100%);
+}
+
+/* Interactive Page Corner Curl Affordances */
+.page-corner-Zone {
+  position: absolute;
+  bottom: 0;
+  width: 58px;
+  height: 58px;
+  z-index: 20;
+  cursor: pointer;
+  transition: transform 180ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.page-corner-right {
+  right: 0;
+  background: linear-gradient(135deg, transparent 50%, rgba(154, 52, 18, 0.08) 50%, rgba(133, 77, 14, 0.18) 100%);
+  border-top-left-radius: 8px;
+}
+
+.page-corner-right:hover {
+  transform: scale(1.18);
+}
+
+.page-corner-left {
+  left: 0;
+  background: linear-gradient(225deg, transparent 50%, rgba(154, 52, 18, 0.08) 50%, rgba(133, 77, 14, 0.18) 100%);
+  border-top-right-radius: 8px;
+}
+
+.page-corner-left:hover {
+  transform: scale(1.18);
+}
+
+/* ==========================================================================
+   3D TURNING LEAF ELEMENT (Front & Back Faces for Real Page Turn)
+   ========================================================================== */
+.turning-leaf {
+  position: absolute;
+  top: 0;
+  bottom: 5px;
+  left: 50%;
+  width: calc(50% - 7px);
+  transform-origin: left center;
+  transform-style: preserve-3d;
+  z-index: 30;
+  pointer-events: none;
+  opacity: 0;
+}
+
+.turning-leaf.is-turning-next {
+  opacity: 1;
+  animation: turnPageNext 680ms cubic-bezier(0.32, 0.08, 0.24, 1) forwards;
+}
+
+.turning-leaf.is-turning-prev {
+  opacity: 1;
+  animation: turnPagePrev 680ms cubic-bezier(0.32, 0.08, 0.24, 1) forwards;
+}
+
+.turning-leaf.is-turning-next-single {
+  opacity: 1;
+  animation: turnPageNextSingle 620ms cubic-bezier(0.32, 0.08, 0.24, 1) forwards;
+}
+
+.turning-leaf.is-turning-prev-single {
+  opacity: 1;
+  animation: turnPagePrevSingle 620ms cubic-bezier(0.32, 0.08, 0.24, 1) forwards;
+}
+
+.leaf-face {
+  position: absolute;
+  inset: 0;
+  padding: 2.25rem 2.75rem 3.25rem;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
+}
+
+.leaf-front {
+  background-color: var(--bg-page-right);
+  border-top-right-radius: 3px;
+  border-bottom-right-radius: 3px;
+  box-shadow: -8px 0 24px rgba(0, 0, 0, 0.15);
+}
+
+.leaf-back {
+  background-color: var(--bg-page-left);
+  border-top-left-radius: 3px;
+  border-bottom-left-radius: 3px;
+  transform: rotateY(180deg);
+  border-right: 1px solid var(--border-hairline);
+  box-shadow: 8px 0 24px rgba(0, 0, 0, 0.15);
+}
+
+/* Dynamic Lighting Overlay During Turn */
+.leaf-face::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  transition: opacity 300ms ease;
+}
+
+.turning-leaf.is-turning-next .leaf-front::after {
+  animation: leafShadowFront 680ms ease-in-out forwards;
+}
+
+.turning-leaf.is-turning-next .leaf-back::after {
+  animation: leafShadowBack 680ms ease-in-out forwards;
+}
+
+@keyframes turnPageNext {
+  0% {
+    transform: rotateY(0deg) skewY(0deg);
+  }
+  45% {
+    transform: rotateY(-88deg) skewY(-1.8deg);
+  }
+  100% {
+    transform: rotateY(-180deg) skewY(0deg);
+  }
+}
+
+@keyframes turnPagePrev {
+  0% {
+    transform: rotateY(-180deg) skewY(0deg);
+  }
+  55% {
+    transform: rotateY(-92deg) skewY(1.8deg);
+  }
+  100% {
+    transform: rotateY(0deg) skewY(0deg);
+  }
+}
+
+@keyframes turnPageNextSingle {
+  0% {
+    transform: rotateY(0deg) skewY(0deg);
+    opacity: 1;
+  }
+  65% {
+    transform: rotateY(-92deg) skewY(-2deg);
+    opacity: 0.92;
+  }
+  100% {
+    transform: rotateY(-125deg) skewY(-1deg);
+    opacity: 0;
+  }
+}
+
+@keyframes turnPagePrevSingle {
+  0% {
+    transform: rotateY(-125deg) skewY(1deg);
+    opacity: 0;
+  }
+  35% {
+    transform: rotateY(-85deg) skewY(2deg);
+    opacity: 0.92;
+  }
+  100% {
+    transform: rotateY(0deg) skewY(0deg);
+    opacity: 1;
+  }
+}
+
+@keyframes leafShadowFront {
+  0% { background: rgba(0, 0, 0, 0); }
+  50% { background: rgba(0, 0, 0, 0.14); }
+  100% { background: rgba(0, 0, 0, 0.22); }
+}
+
+@keyframes leafShadowBack {
+  0% { background: rgba(0, 0, 0, 0.22); }
+  50% { background: rgba(0, 0, 0, 0.10); }
+  100% { background: rgba(0, 0, 0, 0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .turning-leaf.is-turning-next,
+  .turning-leaf.is-turning-prev {
+    animation-duration: 10ms !important;
+  }
+}
+
+/* ==========================================================================
+   LITURGICAL PAGE TYPOGRAPHY & MARGINALIA
+   ========================================================================== */
+.page-running-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 0.75rem;
+  margin-bottom: 1.25rem;
+  border-bottom: 1px solid var(--border-hairline);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.chapter-heading-block {
+  margin-bottom: 1.35rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border-hairline);
+}
+
+.chapter-kicker {
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  color: var(--accent-rubric);
+  margin-bottom: 0.25rem;
+}
+
+.chapter-main-title {
+  font-family: var(--font-display);
+  font-size: 1.9rem;
+  font-weight: 700;
+  line-height: 1.18;
+  color: var(--text-primary);
+  text-wrap: balance;
+}
+
+.chapter-subtitle {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 1.05rem;
+  color: var(--text-secondary);
+  margin-top: 0.25rem;
+}
+
+.verses-flow {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  font-size: var(--verse-font-size);
+  line-height: var(--verse-line-height);
+  color: var(--text-primary);
+}
+
+.verse-item {
+  position: relative;
+  padding: 0.25rem 0.45rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 140ms ease;
+}
+
+.verse-item:hover {
+  background-color: var(--accent-gold-soft);
+}
+
+.verse-item.hl-amber { background-color: var(--hl-amber); }
+.verse-item.hl-rubric { background-color: var(--hl-rubric); }
+.verse-item.hl-lapis { background-color: var(--hl-lapis); }
+.verse-item.hl-olive { background-color: var(--hl-olive); }
+
+.verse-num {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--accent-rubric);
+  vertical-align: super;
+  margin-right: 0.35rem;
+  user-select: none;
+}
+
+/* Liturgical Drop Cap for Verse 1 of a Chapter */
+.verse-item.is-first-verse .verse-text::first-letter {
+  font-family: var(--font-display);
+  font-size: 3.1rem;
+  font-weight: 700;
+  line-height: 0.85;
+  float: left;
+  margin-right: 0.55rem;
+  margin-top: 0.15rem;
+  color: var(--accent-rubric);
+}
+
+.verse-note-indicator {
+  display: inline-block;
+  margin-left: 0.4rem;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--accent-gold);
+  border-bottom: 1px dotted var(--accent-gold);
+}
+
+/* Marginalia / Study Footnotes at bottom of page */
+.page-marginalia {
+  margin-top: 1.5rem;
+  padding-top: 0.85rem;
+  border-top: 1px solid var(--border-hairline);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.marginalia-entry {
+  font-size: 0.8rem;
+  line-height: 1.45;
+  color: var(--text-secondary);
+}
+
+.marginalia-entry strong {
+  font-family: var(--font-display);
+  font-size: 0.92rem;
+  color: var(--accent-rubric);
+}
+
+.marginalia-ref {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  margin-left: 0.35rem;
+}
+
+.page-footer-bar {
+  margin-top: 1rem;
+  padding-top: 0.65rem;
+  border-top: 1px solid var(--border-hairline);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.76rem;
+  color: var(--text-muted);
+}
+
+/* Bottom Page-Turning Controls Bar */
+.codex-navigation-bar {
+  max-width: 1220px;
+  margin: 1rem auto 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.btn-page-turn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.6rem 1.2rem;
+  background-color: var(--bg-page-right);
+  border: 1px solid var(--border-strong);
+  border-radius: 6px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  transition: background-color 150ms ease, transform 150ms ease, border-color 150ms ease;
+}
+
+.btn-page-turn:hover:not(:disabled) {
+  background-color: var(--bg-elevated);
+  border-color: var(--accent-rubric);
+}
+
+.btn-page-turn:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.btn-page-turn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.spread-progress-indicator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.progress-track {
+  width: 220px;
+  height: 4px;
+  background-color: var(--border-hairline);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background-color: var(--accent-rubric);
+  transition: width 240ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ==========================================================================
+   VERSE STUDY POPOVER (Highlights & Personal Margin Notes)
+   ========================================================================== */
+.verse-inspector-bar {
+  max-width: 1220px;
+  margin: 1rem auto 0;
+  padding: 1rem 1.35rem;
+  background-color: var(--bg-page-right);
+  border: 1px solid var(--border-strong);
+  border-radius: 8px;
+  display: none;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.verse-inspector-bar.open {
+  display: flex;
+}
+
+.inspector-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.swatch-group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.color-swatch {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2px solid var(--border-strong);
+  transition: transform 140ms ease;
+}
+
+.color-swatch:hover {
+  transform: scale(1.12);
+}
+
+.color-swatch.swatch-amber { background-color: #F59E0B; }
+.color-swatch.swatch-rubric { background-color: #9A3412; }
+.color-swatch.swatch-lapis { background-color: #1E3A8A; }
+.color-swatch.swatch-olive { background-color: #15803D; }
+
+.inspector-note-row {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.inspector-input {
+  flex: 1;
+  padding: 0.5rem 0.85rem;
+  border: 1px solid var(--border-hairline);
+  border-radius: 6px;
+  background-color: var(--bg-elevated);
+  font-size: 0.9rem;
+}
+
+/* ==========================================================================
+   READING PLANS VIEW (Editorial Catalog & Daily Schedule)
+   ========================================================================== */
+.editorial-section-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding-bottom: 1.25rem;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid var(--border-hairline);
+  flex-wrap: wrap;
+}
+
+.editorial-kicker {
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent-rubric);
+  margin-bottom: 0.35rem;
+}
+
+.editorial-headline {
+  font-family: var(--font-display);
+  font-size: 2.35rem;
+  font-weight: 700;
+  line-height: 1.15;
+  color: var(--text-primary);
+}
+
+.plans-layout {
+  display: grid;
+  grid-template-columns: 380px 1fr;
+  gap: 2.25rem;
+  align-items: start;
+}
+
+.plans-catalog-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.plan-card {
+  padding: 1.35rem;
+  background-color: var(--bg-page-right);
+  border: 1px solid var(--border-hairline);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: border-color 160ms ease, transform 160ms ease;
+}
+
+.plan-card:hover {
+  border-color: var(--border-strong);
+}
+
+.plan-card.selected {
+  border-color: var(--accent-rubric);
+  border-left-width: 4px;
+}
+
+.plan-card-title {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  font-weight: 700;
+  margin: 0.25rem 0 0.5rem;
+}
+
+.plan-card-desc {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  line-height: 1.55;
+  margin-bottom: 0.85rem;
+}
+
+.plan-detail-pane {
+  background-color: var(--bg-page-right);
+  border: 1px solid var(--border-hairline);
+  border-radius: 8px;
+  padding: 2rem;
+}
+
+.reading-day-row {
+  display: grid;
+  grid-template-columns: 44px 1fr auto;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--border-hairline);
+}
+
+.reading-day-row:last-child {
+  border-bottom: none;
+}
+
+.day-check-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1.5px solid var(--border-strong);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  transition: all 150ms ease;
+}
+
+.day-check-btn.completed {
+  background-color: var(--accent-rubric);
+  border-color: var(--accent-rubric);
+  color: #FFFFFF;
+}
+
+/* ==========================================================================
+   NOTES & SEARCH VIEWS
+   ========================================================================== */
+.archive-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 1.25rem;
+}
+
+.archive-entry-card {
+  padding: 1.35rem;
+  background-color: var(--bg-page-right);
+  border: 1px solid var(--border-hairline);
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.search-bar-container {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 1.75rem;
+}
+
+.search-input-large {
+  flex: 1;
+  padding: 0.8rem 1.15rem;
+  font-size: 1rem;
+  background-color: var(--bg-page-right);
+  border: 1px solid var(--border-strong);
+  border-radius: 6px;
+}
+
+/* Modal for Custom Reading Plan */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(15, 12, 10, 0.55);
+  z-index: 60;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+}
+
+.modal-backdrop.open {
+  display: flex;
+}
+
+.modal-dialog {
+  width: 100%;
+  max-width: 540px;
+  background-color: var(--bg-page-right);
+  border: 1px solid var(--border-strong);
+  border-radius: 10px;
+  padding: 2rem;
+}
+
+.form-field {
+  margin-bottom: 1.15rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.form-field label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+/* Single Page Mode Option (Desktop, Tablet Portrait & Mobile) */
+.codex-spread.single-page-mode {
+  grid-template-columns: 1fr;
+  max-width: 780px;
+  margin: 0 auto;
+}
+
+.codex-spread.single-page-mode .book-page-right,
+.codex-spread.single-page-mode .codex-spine-overlay {
+  display: none;
+}
+
+.codex-spread.single-page-mode .book-page-left {
+  border-right: none;
+  border-radius: 3px;
+  background-image: linear-gradient(90deg, rgba(0, 0, 0, 0.055) 0%, rgba(0, 0, 0, 0.015) 5%, transparent 14%, transparent 94%, rgba(0, 0, 0, 0.025) 100%);
+}
+
+.codex-spread.single-page-mode .turning-leaf {
+  left: 7px;
+  width: calc(100% - 14px);
+  transform-origin: left center;
+}
+
+/* Mobile Bottom Navigation (Hidden on Desktop & Large Tablet) */
+.mobile-bottom-nav {
+  display: none;
+}
+
+.selector-pair {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+/* ==========================================================================
+   RESPONSIVE BREAKPOINTS: TABLET (769px – 1024px)
+   ========================================================================== */
+@media (max-width: 1024px) {
+  .top-bar {
+    padding: 0 1.25rem;
+    gap: 1rem;
+  }
+
+  .brand-wordmark {
+    font-size: 1.45rem;
+  }
+
+  .top-nav {
+    gap: 1.15rem;
+  }
+
+  .nav-link {
+    font-size: 0.86rem;
+  }
+
+  .utility-ribbon {
+    padding: 0.6rem 1.25rem;
+  }
+
+  .main-container {
+    padding: 1.25rem 1.25rem 2.5rem;
+  }
+
+  .scriptorium-desk {
+    padding: 1rem 1rem 1.5rem;
+  }
+
+  .book-page,
+  .leaf-face {
+    padding: 1.75rem 1.85rem 2.75rem;
+    min-height: 560px;
+  }
+
+  .codex-book {
+    min-height: 584px;
+  }
+
+  .codex-spread {
+    min-height: 560px;
+  }
+
+  .plans-layout {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .plans-catalog-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1rem;
+  }
+
+  .editorial-headline {
+    font-size: 2rem;
+  }
+}
+
+/* ==========================================================================
+   RESPONSIVE BREAKPOINTS: SMARTPHONES & COMPACT TABLETS (<= 768px)
+   ========================================================================== */
+@media (max-width: 768px) {
+  body {
+    padding-bottom: calc(68px + env(safe-area-inset-bottom, 0px));
+  }
+
+  /* Top Bar simplified for Mobile */
+  .top-bar {
+    height: 56px;
+    padding: 0 0.9rem;
+    gap: 0.5rem;
+  }
+
+  .brand-wordmark {
+    font-size: 1.3rem;
+  }
+
+  .top-nav {
+    display: none;
+  }
+
+  .top-actions {
+    gap: 0.45rem;
+  }
+
+  .btn-secondary-quiet {
+    padding: 0.38rem 0.65rem;
+    font-size: 0.76rem;
+  }
+
+  .btn-primary-rubric {
+    padding: 0.42rem 0.75rem;
+    font-size: 0.78rem;
+  }
+
+  /* Fixed Mobile Bottom Bar */
+  .mobile-bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: calc(64px + env(safe-area-inset-bottom, 0px));
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    background-color: var(--bg-page-right);
+    border-top: 1px solid var(--border-strong);
+    box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.08);
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    z-index: 55;
+  }
+
+  .mobile-nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.22rem;
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    padding: 0.35rem 0.25rem;
+    position: relative;
+    transition: color 150ms ease;
+  }
+
+  .mobile-nav-item.active {
+    color: var(--accent-rubric);
+  }
+
+  .mobile-nav-item.active::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 22%;
+    right: 22%;
+    height: 2.5px;
+    background-color: var(--accent-rubric);
+    border-radius: 0 0 2px 2px;
+  }
+
+  .mobile-nav-icon {
+    width: 20px;
+    height: 20px;
+  }
+
+  /* Utility Ribbon adapted for Touch */
+  .utility-ribbon {
+    padding: 0.55rem 0.9rem;
+  }
+
+  .utility-ribbon-inner {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.55rem;
+  }
+
+  .selector-group {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .selector-pair {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 112px;
+    gap: 0.5rem;
+  }
+
+  .sr-only-mobile,
+  .hide-on-mobile,
+  .spread-mode-control {
+    display: none !important;
+  }
+
+  .editorial-select {
+    width: 100%;
+    padding: 0.45rem 0.65rem;
+    font-size: 0.86rem;
+  }
+
+  .reader-tools-group {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  /* Main Container & Plan Banner */
+  .main-container {
+    padding: 0.85rem 0.75rem 2rem;
+  }
+
+  .plan-reader-banner {
+    padding: 0.7rem 0.9rem;
+    margin-bottom: 0.85rem;
+    gap: 0.65rem;
+  }
+
+  .plan-banner-title {
+    font-size: 1.02rem;
+  }
+
+  .plan-banner-actions {
+    width: 100%;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+  }
+
+  /* Mobile Codex Book Frame & Page */
+  .scriptorium-desk {
+    padding: 0.5rem 0.45rem 1rem;
+    border-radius: 10px;
+  }
+
+  .codex-book {
+    min-height: 480px;
+    padding: 6px 8px 10px;
+    border-radius: 8px;
+  }
+
+  .codex-spread {
+    min-height: 464px;
+    padding: 0 4px 4px;
+    box-shadow: inset 3px 0 0 var(--bg-page-left), inset -3px 0 0 var(--bg-page-right);
+  }
+
+  .codex-ribbon {
+    left: auto;
+    right: 24px;
+    transform: none;
+    width: 18px;
+    height: 48px;
+  }
+
+  .codex-ribbon:hover,
+  .codex-ribbon.bookmarked {
+    height: 60px;
+  }
+
+  .book-page,
+  .leaf-face {
+    min-height: 460px;
+    padding: 1.35rem 1.15rem 2.6rem;
+  }
+
+  .page-running-header {
+    font-size: 0.68rem;
+    margin-bottom: 0.9rem;
+    padding-bottom: 0.55rem;
+  }
+
+  .chapter-heading-block {
+    margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
+  }
+
+  .chapter-main-title {
+    font-size: 1.48rem;
+  }
+
+  .chapter-subtitle {
+    font-size: 0.94rem;
+  }
+
+  .verse-item.is-first-verse .verse-text::first-letter {
+    font-size: 2.55rem;
+    margin-right: 0.45rem;
+  }
+
+  .page-footer-bar {
+    font-size: 0.7rem;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+  }
+
+  /* Bottom Page Turn Navigation on Mobile */
+  .codex-navigation-bar {
+    flex-wrap: wrap;
+    gap: 0.65rem;
+    margin-top: 0.85rem;
+  }
+
+  .spread-progress-indicator {
+    order: -1;
+    width: 100%;
+    text-align: center;
+  }
+
+  .progress-track {
+    width: 100%;
+    max-width: 280px;
+  }
+
+  .btn-page-turn {
+    flex: 1;
+    justify-content: center;
+    padding: 0.65rem 0.75rem;
+    font-size: 0.82rem;
+  }
+
+  /* Verse Study Inspector as Mobile Bottom Sheet */
+  .verse-inspector-bar.open {
+    position: fixed;
+    left: 0.6rem;
+    right: 0.6rem;
+    bottom: calc(70px + env(safe-area-inset-bottom, 0px));
+    z-index: 58;
+    margin: 0;
+    padding: 0.95rem 1rem;
+    box-shadow: 0 -8px 28px rgba(0, 0, 0, 0.25);
+  }
+
+  .inspector-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.65rem;
+  }
+
+  .swatch-group {
+    width: 100%;
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
+
+  .inspector-note-row {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  /* Plans, Notes & Search Views on Mobile */
+  .editorial-section-header {
+    gap: 0.85rem;
+    padding-bottom: 1rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .editorial-headline {
+    font-size: 1.65rem;
+  }
+
+  .plans-catalog-list {
+    grid-template-columns: 1fr;
+  }
+
+  .plan-detail-pane {
+    padding: 1.15rem;
+  }
+
+  .reading-day-row {
+    grid-template-columns: 36px 1fr;
+    gap: 0.75rem;
+  }
+
+  .reading-day-row > button[data-open-passage-book] {
+    grid-column: 2;
+    justify-self: start;
+    margin-top: 0.25rem;
+  }
+
+  .archive-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .search-bar-container {
+    flex-direction: column;
+  }
+
+  .modal-dialog {
+    padding: 1.35rem;
+  }
+}
+
+/* Extra Small Smartphones (<= 400px) */
+@media (max-width: 400px) {
+  .brand-wordmark {
+    font-size: 1.15rem;
+  }
+
+  #themeCycleBtn {
+    max-width: 112px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .book-page,
+  .leaf-face {
+    padding: 1.1rem 0.95rem 2.4rem;
+  }
+
+  .btn-page-turn {
+    font-size: 0.76rem;
+    padding: 0.55rem 0.5rem;
+  }
+}

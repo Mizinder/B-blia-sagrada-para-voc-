@@ -1477,15 +1477,163 @@
       renderActivePlanBanner();
       renderPlansView();
     });
+
+    // Modal de Compartilhamento & Vercel
+    const shareModal = document.getElementById("shareModal");
+    document.getElementById("openShareModalBtn").addEventListener("click", () => {
+      openShareModal(state.selectedVerseKey);
+    });
+
+    document.getElementById("shareSelectedVerseBtn").addEventListener("click", () => {
+      openShareModal(state.selectedVerseKey);
+    });
+
+    document.getElementById("closeShareModalBtn").addEventListener("click", () => {
+      shareModal.classList.remove("open");
+    });
+
+    document.getElementById("copyShareLinkBtn").addEventListener("click", async () => {
+      const payload = getSharePayload(state.selectedVerseKey);
+      const fullCopy = `${payload.quoteText}\n— ${payload.refLabel}\n\nLeia em Bíblia pra você:\n${payload.url}`;
+      const btn = document.getElementById("copyShareLinkBtn");
+      try {
+        await navigator.clipboard.writeText(fullCopy);
+        btn.textContent = "Copiado com Sucesso ✓";
+      } catch (_err) {
+        const input = document.getElementById("shareUrlInput");
+        input.select();
+        document.execCommand("copy");
+        btn.textContent = "Link Copiado ✓";
+      }
+      setTimeout(() => {
+        btn.textContent = "Copiar Citação + Link";
+      }, 2200);
+    });
+
+    document.getElementById("nativeShareBtn").addEventListener("click", async () => {
+      const payload = getSharePayload(state.selectedVerseKey);
+      if (navigator.share) {
+        try {
+          await navigator.share({
+            title: `${payload.refLabel} — Bíblia pra você`,
+            text: `${payload.quoteText} (${payload.refLabel})`,
+            url: payload.url
+          });
+        } catch (_err) {
+          // Cancelado pelo usuário
+        }
+      } else {
+        document.getElementById("copyShareLinkBtn").click();
+      }
+    });
+
+    document.getElementById("copyVercelCmdBtn").addEventListener("click", async () => {
+      const btn = document.getElementById("copyVercelCmdBtn");
+      try {
+        await navigator.clipboard.writeText("npx vercel --prod");
+        btn.textContent = "Copiado ✓";
+      } catch (_err) {
+        btn.textContent = "npx vercel --prod";
+      }
+      setTimeout(() => {
+        btn.textContent = "Copiar Comando";
+      }, 2000);
+    });
+  }
+
+  function getSharePayload(verseKeyOptional) {
+    const baseUrl = window.location.origin + window.location.pathname;
+    if (verseKeyOptional) {
+      const [bookId, chStr, vStr] = verseKeyOptional.split(":");
+      const { book, chapterNum, data } = getChapterData(bookId, Number(chStr));
+      const verseText = (data.verses || [])[Number(vStr) - 1] || "";
+      const url = `${baseUrl}?livro=${encodeURIComponent(book.id)}&cap=${chapterNum}&v=${vStr}`;
+      return {
+        refLabel: `${book.name} ${chapterNum}:${vStr}`,
+        quoteText: `"${verseText}"`,
+        url
+      };
+    }
+
+    const { book, chapterNum, data } = getChapterData(state.bookId, state.chapter);
+    const firstVerse = (data.verses || [])[0] || "";
+    const url = `${baseUrl}?livro=${encodeURIComponent(book.id)}&cap=${chapterNum}`;
+    return {
+      refLabel: `${book.name} ${chapterNum} — ${data.title}`,
+      quoteText: `"${firstVerse}"`,
+      url
+    };
+  }
+
+  function openShareModal(verseKeyOptional) {
+    const payload = getSharePayload(verseKeyOptional);
+    document.getElementById("shareQuoteRef").textContent = payload.refLabel;
+    document.getElementById("shareQuoteText").textContent = payload.quoteText;
+    document.getElementById("shareUrlInput").value = payload.url;
+
+    const shareMessage = `${payload.quoteText} — ${payload.refLabel}\n\nLeia em Bíblia pra você: ${payload.url}`;
+    document.getElementById("whatsappShareLink").href =
+      `https://wa.me/?text=${encodeURIComponent(shareMessage)}`;
+    document.getElementById("telegramShareLink").href =
+      `https://t.me/share/url?url=${encodeURIComponent(payload.url)}&text=${encodeURIComponent(`${payload.quoteText} (${payload.refLabel})`)}`;
+
+    document.getElementById("shareModal").classList.add("open");
+  }
+
+  // Lê parâmetros da URL (?livro=salmos&cap=23&v=1) quando compartilhado na Vercel
+  function applyDeepLinkFromURL() {
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const bookParam = params.get("livro");
+      const capParam = params.get("cap");
+      const verseParam = params.get("v");
+      const planParam = params.get("plano");
+
+      if (planParam) {
+        const allPlans = getAllPlans();
+        const foundPlan = allPlans.find((p) => p.id === planParam);
+        if (foundPlan) {
+          state.activePlanId = foundPlan.id;
+          state.selectedPlanDetailId = foundPlan.id;
+        }
+      }
+
+      if (bookParam) {
+        const foundBook = window.BIBLE_BOOKS.find((b) => b.id === bookParam.toLowerCase());
+        if (foundBook) {
+          state.bookId = foundBook.id;
+          const chNums = getChapterNumbers(foundBook);
+          const requestedCh = Number(capParam);
+          state.chapter = chNums.includes(requestedCh) ? requestedCh : chNums[0];
+          state.currentView = "reader";
+
+          if (verseParam) {
+            const vNum = Math.max(1, Number(verseParam));
+            const pageIndex = Math.floor((vNum - 1) / VERSES_PER_PAGE);
+            state.spreadIndex = isEffectiveSinglePage() ? pageIndex : Math.floor(pageIndex / 2);
+            state.selectedVerseKey = `${state.bookId}:${state.chapter}:${vNum}`;
+          } else {
+            state.spreadIndex = 0;
+          }
+          saveState();
+        }
+      }
+    } catch (_e) {
+      // Ignora URLs malformadas
+    }
   }
 
   // Inicialização Geral
   function bootstrap() {
+    applyDeepLinkFromURL();
     applyThemeAndTypography();
     renderSelectors();
     renderActivePlanBanner();
     renderCodexStatic();
     initEvents();
+    if (state.selectedVerseKey && state.currentView === "reader") {
+      openVerseInspector(state.selectedVerseKey);
+    }
     if (state.currentView !== "reader") {
       switchView(state.currentView);
     }

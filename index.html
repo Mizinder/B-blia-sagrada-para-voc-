@@ -103,6 +103,10 @@
           <button type="button" class="btn-secondary-quiet" id="soundToggleBtn" title="Som suave de virar página">
             Som: Ativo
           </button>
+
+          <button type="button" class="btn-secondary-quiet" id="openShareModalBtn" title="Compartilhar passagem ou publicar na Vercel">
+            Compartilhar ↗
+          </button>
         </div>
       </div>
     </section>
@@ -173,6 +177,7 @@
                 <button type="button" class="color-swatch swatch-rubric" data-color="hl-rubric" title="Rubrica Litúrgica"></button>
                 <button type="button" class="color-swatch swatch-lapis" data-color="hl-lapis" title="Lápis-Lazúli"></button>
                 <button type="button" class="color-swatch swatch-olive" data-color="hl-olive" title="Verde Oliva"></button>
+                <button type="button" class="btn-secondary-quiet" id="shareSelectedVerseBtn">Compartilhar ↗</button>
                 <button type="button" class="btn-secondary-quiet" id="clearHighlightBtn">Limpar</button>
                 <button type="button" class="btn-secondary-quiet" id="closeInspectorBtn">Fechar ✕</button>
               </div>
@@ -331,6 +336,97 @@
             <button type="submit" class="btn-primary-rubric">Gerar e Ativar Plano</button>
           </div>
         </form>
+      </div>
+    </div>
+
+    <!-- MODAL: SHARE PASSAGE & VERCEL DEPLOYMENT -->
+    <div class="modal-backdrop" id="shareModal" role="dialog" aria-modal="true" aria-labelledby="shareModalTitle">
+      <div class="modal-dialog share-modal-dialog">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem;">
+          <div>
+            <div class="editorial-kicker">Compartilhamento &amp; Publicação Web</div>
+            <h2 class="chapter-main-title" id="shareModalTitle" style="font-size: 1.65rem; margin-bottom: 0.75rem;">
+              Compartilhar Bíblia pra você
+            </h2>
+          </div>
+          <button type="button" class="btn-secondary-quiet" id="closeShareModalBtn">Fechar ✕</button>
+        </div>
+
+        <!-- Cartão de Citação da Passagem / Versículo Atual -->
+        <div class="share-quote-card" id="shareQuoteCard">
+          <div class="editorial-kicker" id="shareQuoteRef">Gênesis 1</div>
+          <p class="share-quote-text" id="shareQuoteText">
+            "No princípio criou Deus os céus e a terra."
+          </p>
+          <div class="metadata-inline" style="margin-top: 0.5rem;">
+            <span>Bíblia pra você — Leitura Bíblica &amp; Planos Devocionais</span>
+          </div>
+        </div>
+
+        <!-- Link Direto Profundo (Deep Link) -->
+        <div class="form-field" style="margin-top: 1rem;">
+          <label for="shareUrlInput">Link Direto da Passagem (Funciona na Vercel e qualquer domínio)</label>
+          <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+            <input
+              type="text"
+              id="shareUrlInput"
+              class="inspector-input tabular-nums"
+              readonly
+              style="font-size: 0.8rem;"
+            />
+            <button type="button" class="btn-primary-rubric" id="copyShareLinkBtn">
+              Copiar Citação + Link
+            </button>
+          </div>
+        </div>
+
+        <!-- Botões de Compartilhamento Rápido -->
+        <div style="display: flex; flex-wrap: wrap; gap: 0.6rem; margin-bottom: 1.25rem;">
+          <button type="button" class="btn-secondary-quiet" id="nativeShareBtn">
+            Compartilhar no Aparelho ↗
+          </button>
+          <a
+            href="https://wa.me/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="btn-secondary-quiet"
+            id="whatsappShareLink"
+            style="text-decoration: none; display: inline-flex; align-items: center;"
+          >
+            Enviar no WhatsApp ↗
+          </a>
+          <a
+            href="https://t.me/share/url"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="btn-secondary-quiet"
+            id="telegramShareLink"
+            style="text-decoration: none; display: inline-flex; align-items: center;"
+          >
+            Enviar no Telegram ↗
+          </a>
+        </div>
+
+        <!-- Guia de Hospedagem e Compartilhamento na Vercel -->
+        <div class="vercel-deploy-box">
+          <div style="display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; margin-bottom: 0.45rem;">
+            <span class="editorial-kicker" style="margin: 0;">Pronto para Deploy na Vercel (vercel.json incluso)</span>
+            <span class="metadata-inline tabular-nums">HTML · CSS · JS Puro</span>
+          </div>
+          <p style="font-size: 0.83rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 0.65rem;">
+            O projeto já contém o arquivo <code>vercel.json</code> e gera a pasta estática <code>dist/</code> automaticamente. Para publicar e gerar seu link público <code>.vercel.app</code>:
+          </p>
+          <ol class="vercel-steps-list">
+            <li>Suba este projeto para o seu <strong>GitHub</strong> e importe em <strong>vercel.com/new</strong> (configuração automática detectada), ou:</li>
+            <li>No terminal da pasta do projeto, execute o comando abaixo:</li>
+          </ol>
+          <div style="display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; background-color: var(--bg-canvas); border: 1px solid var(--border-hairline); border-radius: 6px; padding: 0.45rem 0.75rem; margin-top: 0.5rem;">
+            <code class="tabular-nums" style="font-size: 0.8rem; color: var(--text-primary);">npx vercel --prod</code>
+            <button type="button" class="btn-secondary-quiet" id="copyVercelCmdBtn" style="padding: 0.25rem 0.6rem; font-size: 0.74rem;">
+              Copiar Comando
+            </button>
+          </div>
+        </div>
       </div>
     </div>
 

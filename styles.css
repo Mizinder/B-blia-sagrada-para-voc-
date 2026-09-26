@@ -1100,10 +1100,47 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .modal-dialog {
   width: 100%;
   max-width: 540px;
+  max-height: 90vh;
+  overflow-y: auto;
   background-color: var(--bg-page-right);
   border: 1px solid var(--border-strong);
   border-radius: 10px;
   padding: 2rem;
+}
+
+.share-modal-dialog {
+  max-width: 580px;
+}
+
+.share-quote-card {
+  padding: 1.15rem 1.35rem;
+  background-color: var(--bg-elevated);
+  border: 1px solid var(--border-hairline);
+  border-left: 3px solid var(--accent-rubric);
+  border-radius: 6px;
+}
+
+.share-quote-text {
+  font-family: var(--font-display);
+  font-size: 1.28rem;
+  font-style: italic;
+  line-height: 1.45;
+  color: var(--text-primary);
+  margin-top: 0.25rem;
+}
+
+.vercel-deploy-box {
+  padding: 1rem 1.15rem;
+  background-color: var(--bg-elevated);
+  border: 1px solid var(--border-hairline);
+  border-radius: 8px;
+}
+
+.vercel-steps-list {
+  padding-left: 1.25rem;
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
 }
 
 .form-field {
